@@ -1,8 +1,11 @@
 <?php
 
-class Conta {
+namespace Alura\banco\models\account;
+
+abstract class Conta {
+
     private Titular $titular;
-    private float $saldo;
+    protected float $saldo;
     private static int $numeroContas = 0;
 
     public function __construct(Titular $titular) {
@@ -16,15 +19,17 @@ class Conta {
         self::$numeroContas--;
     }
 
-    public function sacar(float $valorASacar) : void {
-        if ($valorASacar > $this->saldo) {
+    public function sacar(float $valorASacar): void {
+        $tarifaSaque = $valorASacar * $this->percentualTarifa();
+        $valorSaque = $valorASacar + $tarifaSaque;
+        if ($valorSaque > $this->saldo) {
             echo "Saldo indisponível";
             return;
         }
-        $this->saldo -= $valorASacar;
+        $this->saldo -= $valorSaque;
     }
 
-    public function depositar(float $valorADepositar) : void {
+    public function depositar(float $valorADepositar): void {
         if ($valorADepositar < 0) {
             echo "Valor precisa ser positivo";
             return;
@@ -32,16 +37,7 @@ class Conta {
         $this->saldo += $valorADepositar;
     }
 
-    public function transferir(float $valorATransferir, Conta $contaDestino) : void {
-        if ($valorATransferir > $this->saldo) {
-            echo "Saldo indisponível";
-            return;
-        }
-        $this->sacar($valorATransferir);
-        $contaDestino->depositar($valorATransferir);
-    }
-
-    public function recuperarSaldo() : float {
+    public function recuperarSaldo(): float {
         return $this->saldo;
     }
 
@@ -56,5 +52,7 @@ class Conta {
     public function getCpf(): string {
         return $this->titular->getCpf();
     }
+
+    abstract protected function percentualTarifa(): float;
 
 }

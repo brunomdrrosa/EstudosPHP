@@ -1,20 +1,35 @@
 <?php
 
-require_once 'src/Conta.php';
-require_once 'src/Titular.php';
-require_once 'src/CPF.php';
+require_once 'autoload.php';
 
-$bruno = new Titular(new CPF("123.456.789-00"), "Bruno Machado");
+use Alura\Banco\models\account\{ContaCorrente, ContaPoupanca, Titular};
+use Alura\Banco\models\{Endereco, CPF};
 
-$primeiraConta = new Conta($bruno);
-$primeiraConta->depositar(500);
-$primeiraConta->sacar(300);
+//$endereco = new Endereco('Porto Alegre', 'Bairro', 'Rua', '123');
+//
+//$bruno = new Titular(new CPF("123.456.789-00"), "Bruno Machado", $endereco);
+//
+//$primeiraConta = new Conta($bruno);
+//$primeiraConta->depositar(500);
+//$primeiraConta->sacar(300);
+//
+//echo $primeiraConta->recuperarSaldo() . PHP_EOL;
+//echo $primeiraConta->getCpf() . PHP_EOL;
+//echo $primeiraConta->getTitular() . PHP_EOL;
+//
+//$patricia = new Titular(new CPF('698.549.548-10'), 'Patricia', $endereco);
+//$segundaConta = new Conta($patricia);
+//var_dump($segundaConta);
+//
+//$outroEndereco = new Endereco('A', 'b', 'c', '1D');
+//$outra = new Conta(new Titular(new CPF('123.654.789-01'), 'Abcdefg', $outroEndereco));
+//unset($segundaConta);
+//echo Conta::getNumeroContas();
 
-echo $primeiraConta->recuperarSaldo() . PHP_EOL;
-echo $primeiraConta->getCpf() . PHP_EOL;
-echo $primeiraConta->getTitular() . PHP_EOL;
+$conta = new ContaCorrente(new Titular(new CPF('123.456.789-00'), 'Teste', new Endereco('', '', '', '')));
+echo $conta->recuperarSaldo() . PHP_EOL;
+$conta->depositar(500);
+echo $conta->recuperarSaldo() . PHP_EOL;
+$conta->sacar(300);
 
-$fulano = new Titular(new CPF("987.654.321-00"), "Fulano");
-$segundaConta = new Conta($fulano);
-
-echo Conta::getNumeroContas();
+echo $conta->recuperarSaldo() . PHP_EOL;
